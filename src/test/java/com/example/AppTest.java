@@ -1,0 +1,11 @@
+package com.example;
+
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+
+public class AppTest {
+    @Test
+    public void testAddition() {
+        assertEquals(12, App.add(5, 7));
+    }
+}
