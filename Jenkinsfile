@@ -20,8 +20,11 @@ pipeline {
             }
             post {
                 always {
-                    junit '**/target/surefire-reports/*.xml',
+                    junit testresults: '**/target/surefire-reports/*.xml',
                         allowEmptyResults: true
+
+                    echo 'Pipeline completed. Check the stage results.'
+
                 }
             }
         }
