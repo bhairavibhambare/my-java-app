@@ -1,40 +1,53 @@
+
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven-3.9'
+        jdk 'JDK-17'
+    }
+
     stages {
-        stage('Checkout Code') {
+        stage('1. Checkout Code') {
             steps {
+                echo 'Fetching source code from GitHub...'
                 checkout scm
             }
         }
 
-        stage('Build') {
+        stage('2. Build') {
             steps {
+                echo 'Compiling the Java application...'
                 sh 'mvn clean compile'
             }
         }
 
-        stage('Unit Test') {
+        stage('3. Unit Test') {
             steps {
+                echo 'Running unit tests...'
                 sh 'mvn test'
             }
             post {
                 always {
-                    junit testResults: '**/target/surefire-reports/*.xml',
-
+                    junit '**/target/surefire-reports/*.xml'
                 }
             }
         }
 
-        stage('Package') {
+        stage('4. Package') {
             steps {
+                echo 'Packaging application into JAR/WAR...'
                 sh 'mvn package -DskipTests'
             }
         }
 
-        stage('Deploy') {
+        stage('5. Deploy') {
             steps {
-                sh 'cp target/*.jar /tmp/deployed-app.jar || true'
+                sh '''
+                    echo "Deploying application artifact..."
+                    cp target/*.jar /tmp/deployed-app.jar || true
+                    echo "Deployment completed successfully."
+                '''
             }
         }
     }
@@ -44,7 +57,8 @@ pipeline {
             echo 'Pipeline completed successfully!'
         }
         failure {
-            echo 'Pipeline failed. Check the console output.'
+            echo 'Pipeline failed. Check the logs for details.'
         }
     }
 }
+
