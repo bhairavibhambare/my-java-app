@@ -21,9 +21,6 @@ pipeline {
             post {
                 always {
                     junit testResults: '**/target/surefire-reports/*.xml',
-                        allowEmptyResults: true
-
-                    echo 'Pipeline completed. Check the stage results.'
 
                 }
             }
